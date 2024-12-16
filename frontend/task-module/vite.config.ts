@@ -11,6 +11,7 @@ export default defineConfig({
       exposes: {
         "./List": "./src/components/List/List.tsx",
         "./Input": "./src/components/Input/Input.tsx",
+        "./TaskList": "./src/components/TaskList/TaskList.tsx",
       },
       shared: ["react"],
     }),

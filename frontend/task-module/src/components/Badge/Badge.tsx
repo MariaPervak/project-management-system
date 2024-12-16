@@ -12,30 +12,38 @@ export interface IBadge {
   format: BadgeFormat;
 }
 
+const BacklogIconUrl = new URL(BacklogIcon, import.meta.url);
+const InProgressIconUrl = new URL(InProgressIcon, import.meta.url);
+const DoneIconUrl = new URL(DoneIcon, import.meta.url);
+const CancelledIconUrl = new URL(CancelledIcon, import.meta.url);
+const NewIconUrl = new URL(NewIcon, import.meta.url);
+
+console.log('BacklogIconUrl', BacklogIconUrl)
+
 const generateContent = (status?: BadgeStatus) => {
   let title = "NEW";
-  let icon = NewIcon;
+  let icon: URL | string = NewIcon;
   if (status){
     switch (status) {
       case "backlog":
-        icon = BacklogIcon;
+        icon = BacklogIconUrl.href;
         title = "BACKLOG";
         break;
       case "inProgress":
-        icon = InProgressIcon;
+        icon = InProgressIconUrl.href;
         title = "IN PROGRESS";
         break;
       case "done":
-        icon = DoneIcon;
+        icon = DoneIconUrl.href;
         title = "DONE";
         break;
       case "cancelled":
-        icon = CancelledIcon;
+        icon = CancelledIconUrl.href;
         title = "CANCELLED";
         break;
       default:
         title = "NEW";
-        icon = NewIcon;
+        icon = NewIconUrl.href;
     }
   }
 
