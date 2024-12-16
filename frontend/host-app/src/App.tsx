@@ -1,21 +1,36 @@
-import { useState } from "react";
-import List from "task_module/List";
-import Input from "task_module/Input";
+import TaskList from "task_module/TaskList";
+import { useQuery, gql } from '@apollo/client';
+
+export type BadgeStatus = 'inProgress' | 'done' | 'backlog' | 'cancelled';
+
+export interface ITask {
+  id: number;
+  name: string;
+  title: string;
+  status: BadgeStatus;
+  description?: string;
+}
+
+const GET_TASKS = gql`
+    query Tasks {
+      tasks {
+        id,
+        name
+        status
+        title
+        description
+      }
+    }
+  `
+
 
 function App() {
-  const [newTodo, setNewTodo] = useState("");
-  const [todos, setTodos] = useState([]);
-  const onSubmit = () => {
-    // @ts-ignore
-    setTodos((prev:any) => [...prev, newTodo]);
-    setNewTodo("");
-  };
+  const { loading, error, data } = useQuery(GET_TASKS);
+  if (loading) return <p>Loading...</p>;
 
+  if (error) return <p>Error : {error.message}</p>;
   return (
-    <>
-      <Input value={newTodo} onChange={setNewTodo} onSubmit={onSubmit} />
-      <List items={todos} />
-    </>
+    <TaskList list={data.tasks}/>
   );
 }
 

@@ -7,7 +7,7 @@ import App from './App.tsx'
 
 
 const client = new ApolloClient({
-  uri: 'https://flyby-router-demo.herokuapp.com/',
+  uri: 'http://localhost:4000/',
   cache: new InMemoryCache(),
 });
 
