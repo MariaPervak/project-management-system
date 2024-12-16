@@ -1,0 +1,32 @@
+.badge{
+  padding: 3px 5px;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: 600;
+  //color: white;
+  text-align: center;
+  width: fit-content;
+
+  &_backlog{
+    background: var(--gray);
+  }
+
+  &_inProgress{
+    background: var(--orange);
+  }
+
+  &_done{
+    background: var(--green);
+  }
+
+  &_cancelled{
+    background: var(--red);
+  }
+
+  &_icon{
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border-radius: 6px;
+  }
+}

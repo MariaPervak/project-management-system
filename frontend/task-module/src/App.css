@@ -1,0 +1,13 @@
+body{
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  padding:25px;
+}
+
+#root{
+  --gray: #E7EEE7;
+  --dark-gray: #686666;
+  --green: #006955;
+  --orange: #FEAE73;
+  --red: #D64E52;
+  --blue: #004869;
+}
