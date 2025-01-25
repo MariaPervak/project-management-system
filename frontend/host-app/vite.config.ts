@@ -9,6 +9,7 @@ export default defineConfig({
       name: "host-app",
       remotes: {
         task_module: "http://localhost:4173/assets/remoteEntry.js",
+        kanban_module: "http://127.0.0.1:5170/assets/remoteEntry.js",
       },
       shared: ["react"],
     }),
@@ -22,9 +23,8 @@ export default defineConfig({
     },
   },
   build: {
-    modulePreload: false,
+    modulePreload: true,
     target: "esnext",
-
     minify: false,
     cssCodeSplit: false,
   },

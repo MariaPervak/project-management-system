@@ -1,4 +1,10 @@
 import { gql, useMutation } from '@apollo/client';
+import Input from "../../components/common/Input/Input.tsx";
+import {useState} from "react";
+import TextArea from "../../components/common/Textarea/Textarea.tsx";
+import Button from "../../components/common/Button/Button.tsx";
+import Title from "../../components/Title/Title.tsx";
+import './CreatePage.scss';
 
 const ADD_TASK = gql`
 mutation AddTask($name: String, $title: String, $description: String) {
@@ -10,9 +16,16 @@ mutation AddTask($name: String, $title: String, $description: String) {
 
 const CreatePage = () => {
   const [addTask, { data, loading, error }] = useMutation(ADD_TASK);
+  const [form, setForm] = useState({name: 'CRM_5604'});
   const handleClick = (e: any) => {
     e.preventDefault();
-    addTask({variables: {name: 'CRM_5604', title: 'test react', description: 'test react'}})
+    addTask({variables: form})
+  }
+
+  const handleInput = (e: any) => {
+    setForm((prevState) => {
+      return {...prevState, [e.target.name]: e.target.value}
+    })
   }
 
   console.log('data', data);
@@ -22,8 +35,14 @@ const CreatePage = () => {
   if (error) return `Submission error! ${error.message}`;
 
   return (
-    <div>
-      <button onClick={handleClick}>Создать</button>
+    <div className="createPage">
+      <Title>Создание задачи</Title>
+      <Input type="text" name="title" placeholder="Заголовок" onChange={handleInput} />
+      <TextArea name="description" placeholder="Описание" onChange={handleInput} />
+      <div className="createPage__buttons">
+        <Button variant="secondary">Отмена</Button>
+        <Button onClick={handleClick} className="createPage__button">Создать</Button>
+      </div>
     </div>
   );
 };
