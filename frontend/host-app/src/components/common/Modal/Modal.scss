@@ -1,0 +1,56 @@
+.modal{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+
+  &__inner{
+    width: 500px;
+    max-width: 100%;
+    position: relative;
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+  }
+
+  &__close{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    font-size: 25px;
+    cursor: pointer;
+  }
+
+  &__title{
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  &__content{
+    margin: 20px 0;
+  }
+
+  &__button{
+    background: transparent;
+    border: 1px solid black;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+
+  &__footer{
+    text-align: right;
+  }
+}

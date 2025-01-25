@@ -12,6 +12,44 @@ const TaskQuery = {
       return { message: error.message };
     }
   },
+  kanbanTasks: async (_, __, contextValue ) => {
+    try {
+      if (contextValue.user.role !== 'guest') {
+        const result = await pool.query(`SELECT * FROM tasks`);
+        const columns = new Set();
+        const cards = [];
+        const tasks = {
+          columns: [],
+        };
+        result.rows.forEach((row, id) => {
+          // columns.add(row.status);
+          const columnIndex = tasks.columns.findIndex((column) => column.title === row.id);
+          if (columnIndex > -1){
+
+          }
+          const card = {
+            id: row.id,
+            title: row.title,
+            description: row.description,
+          }
+          const column = {
+            id: row.id,
+            title: row.title,
+          }
+
+        })
+        const arrayColumns = Array.from(columns);
+
+
+
+
+        return tasks;
+      }
+      return [];
+    } catch (error) {
+      return { message: error.message };
+    }
+  },
 }
 
 const TaskMutation = {

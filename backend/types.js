@@ -10,6 +10,22 @@ type Task {
    description: String
 }
 
+type KanbanTask {
+   id: Int
+   title: String
+   description: String
+}
+
+type KanbanColumn {
+  id: Int,
+  title: String,
+  cards: [KanbanTask],
+}
+
+type KanbanTasks {
+  columns: [KanbanColumn]
+}
+
 type TaskResult {
    id: Int
    message: String
@@ -36,7 +52,9 @@ type Mutation {
 
 type Query {
    tasks: [Task]!
-   currentUser: User
+   kanbanTasks: [KanbanTasks]!
+   currentUser: User,
+   loginCheck(token: String!): Boolean
 }
 
 `;

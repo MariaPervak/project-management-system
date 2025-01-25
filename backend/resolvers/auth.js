@@ -2,11 +2,26 @@ const pool = require("../db");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const {AuthenticationError} = require("apollo-server-express");
+const {getUser} = require("../utils");
+const {GraphQLError} = require("graphql/error");
 
 const JWT_SECRET='JWT_SECRET';
 
 const AuthQuery = {
-
+  loginCheck: async (root, {token} ) => {
+    try {
+      if (token){
+        const user = await getUser(token);
+        return !!user;
+      }
+    } catch (error) {
+      throw new GraphQLError('Ошибка доступа', {
+        extensions: {
+          code: 'FORBIDDEN',
+        },
+      });
+    }
+  },
 }
 
 const AuthMutation = {
@@ -24,26 +39,26 @@ const AuthMutation = {
            `,
         [username, email, hashed, role]
       );
-      return jwt.sign({ id: result.rows[0].id, role: result.rows[0].role }, JWT_SECRET);
+      return jwt.sign({ id: result?.rows[0].id, role: result?.rows[0].role }, JWT_SECRET);
     } catch (err) {
       throw new Error('Ошибка при создании аккаунта');
     }
   },
-  signIn: async (parent, { username, password }) => {
+  signIn: async (root, { username, password }) => {
     if (username) {
       username = username.trim().toLowerCase();
     }
     const user = await pool.query(`SELECT * FROM users where username = $1 OR email = $1`, [username]);
-    const {password: hashedPassword, id} = user.rows[0];
-    if (!user) {
+    if (!user?.rows.length) {
       throw new AuthenticationError('Пользователь не найден');
     }
+    const {password: hashedPassword, id, role} = user.rows[0];
     const valid = await bcrypt.compare(password, hashedPassword);
     if (!valid) {
       throw new AuthenticationError('Неверное имя пользовтаеля или пароль');
     }
-    return jwt.sign({ id }, JWT_SECRET);
-  }
+    return jwt.sign({ id, role }, JWT_SECRET);
+  },
 }
 
 module.exports = {
