@@ -7,16 +7,7 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-frontend/host-app/node_modules
-frontend/host-app/dist
-
-frontend/task-module/node_modules
-frontend/task-module/dist
-
-frontend/ui-components/node_modules
-frontend/ui-components/dist
-
-backend/node_modules
+node_modules
 dist
 dist-ssr
 *.local

@@ -9,7 +9,8 @@ export default defineConfig({
       name: "host-app",
       remotes: {
         task_module: "http://localhost:4173/assets/remoteEntry.js",
-        kanban_module: "http://127.0.0.1:5170/assets/remoteEntry.js",
+        kanban_module: "http://localhost/assets/remoteEntry.js",
+        ui_components: "http://localhost:3002/assets/remoteEntry.js",
       },
       shared: ["react"],
     }),

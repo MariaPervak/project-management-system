@@ -1,0 +1,18 @@
+.button{
+  border-radius: 5px;
+  padding: 10px 20px;
+  border-color: #004869;
+  cursor: pointer;
+  font-weight: bolder;
+
+  &_primary{
+    background: #004869;
+    color: white;
+    min-width: 250px;
+  }
+
+  &_secondary{
+    background: white;
+    color: #004869;
+  }
+}
