@@ -6,9 +6,9 @@ import Layout from "./components/Layout/Layout.tsx";
 import CreatePage from "./pages/Create/CreatePage.tsx";
 import {AuthContext} from "../context/AuthContext/AuthContext.tsx";
 import {clearToken, getToken} from "./components/Auth/helpers.ts";
-import {useEffect, useMemo, useState} from "react";
+import {useEffect, useState} from "react";
 import {jwtDecode} from "jwt-decode";
-import KanbanPage from "./pages/KanbanPage/KanbanPage.tsx";
+// import KanbanPage from "./pages/KanbanPage/KanbanPage.tsx";
 
 export type BadgeStatus = 'inProgress' | 'done' | 'backlog' | 'cancelled';
 
@@ -66,10 +66,11 @@ function App() {
       }
       if (loggedData && loggedData.loginCheck){
         const decoded: AuthState = jwtDecode(token);
+        console.log('decoded', decoded)
         setAuthData(decoded);
       }
     }
-  }, [loggedLoading, loggedError, loggedData]);
+  }, [loggedLoading, loggedError, loggedData, token]);
 
   useEffect(() => {
     if (data){
@@ -85,7 +86,7 @@ function App() {
       <Layout>
         <Routes>
           <Route path="/" element={<TaskList list={data.tasks}/>}/>
-          <Route path="/kanban" element={<KanbanPage/>}/>
+          {/*<Route path="/kanban" element={<KanbanPage board={undefined}/>}/>*/}
           <Route path="/create" element={<CreatePage/>}/>
         </Routes>
       </Layout>

@@ -1,8 +1,7 @@
 import { gql, useMutation } from '@apollo/client';
-import Input from "../../components/common/Input/Input.tsx";
 import {useState} from "react";
 import TextArea from "../../components/common/Textarea/Textarea.tsx";
-import Button from "../../components/common/Button/Button.tsx";
+import {Button, Input} from "ui_components/components";
 import Title from "../../components/Title/Title.tsx";
 import './CreatePage.scss';
 
