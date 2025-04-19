@@ -6,7 +6,7 @@ type Task {
    id: Int
    name: String
    title: String
-   status: String
+   status: Int
    description: String
 }
 
@@ -32,6 +32,11 @@ type TaskResult {
    tasks: [Task]
 }
 
+type Status {
+    id: Int
+    name: String!
+}
+
 type User {
   id: ID!
   username: String!
@@ -45,7 +50,7 @@ type AuthPayload {
 }
 
 type Mutation {
-   addTask(name:String, title: String, description: String): Task
+   addTask(name:String, title: String, status: Int, description: String): Task
    signUp(username: String!, email: String!, password: String!, role: String): String!
    signIn(username: String!, password: String!): String!
 }
@@ -53,6 +58,7 @@ type Mutation {
 type Query {
    tasks: [Task]!
    kanbanTasks: [KanbanTasks]!
+   statuses: [Status]
    currentUser: User,
    loginCheck(token: String!): Boolean
 }

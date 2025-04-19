@@ -55,8 +55,8 @@ const TaskQuery = {
 const TaskMutation = {
   addTask: async (_, args) => {
     try {
-      const {name, title, description} = args;
-      const status = 'backlog'
+      const {name, title, status, description} = args;
+      console.log('args', args)
       const result = await pool.query(`INSERT INTO tasks (name, title, status, description) 
 VALUES ($1, $2, $3, $4) RETURNING id, name, title, description, status`, [name, title, status, description] );
       return result.rows[0];
