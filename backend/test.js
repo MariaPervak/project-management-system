@@ -53,4 +53,17 @@ const findUser = async (username) => {
   }
 }
 
-findUser('admin@mail.ru' ).then(result => {});
+// findUser('admin@mail.ru' ).then(result => {});
+
+const getStatuses = async () => {
+  try {
+    const result = await pool.query(`SELECT * FROM status`);
+    return result.rows;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+getStatuses().then(result => {
+  console.log(result)
+});

@@ -1,10 +1,12 @@
 import {useContext, useEffect, useState} from "react";
 import { useMutation, gql } from '@apollo/client';
 import Modal from "../common/Modal/Modal.tsx";
-import Input from "../common/Input/Input.tsx";
 import Toast from "../common/Toast/Toast.tsx";
 import {AuthContext} from "../../../context/AuthContext/AuthContext.tsx";
 import {clearToken} from "./helpers.ts";
+import {Button, Input} from "ui_components/components";
+
+import './Auth.scss';
 
 type Action = 'register' | 'auth';
 
@@ -95,15 +97,15 @@ const Auth = ({onRegister, onAuth}: AuthProps) => {
 
   return (
     <>
-      <div>
+      <div className="auth-container">
         {authData.role === 'guest' && (
           <>
-            <button onClick={() => setIsRegisterOpen(true)}>Зарегистрироваться</button>
-            <button onClick={() => setIsAuthOpen(true)}>Авторизоваться</button>
+            <Button onClick={() => setIsRegisterOpen(true)}>Зарегистрироваться</Button>
+            <Button onClick={() => setIsAuthOpen(true)}>Авторизоваться</Button>
           </>
         )}
         {authData.role !== 'guest' && (
-          <button onClick={handleLogout}>Выйти</button>
+          <Button onClick={handleLogout}>Выйти</Button>
         )}
       </div>
       <Modal

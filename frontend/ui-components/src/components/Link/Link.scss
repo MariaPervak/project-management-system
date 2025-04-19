@@ -1,0 +1,12 @@
+.link{
+  font-size: 1rem;
+  font-weight: 700;
+  text-decoration: none;
+  color: #004869;
+
+  &:hover{
+    text-decoration: underline;
+    color: darken(#004869, 10%);
+  }
+
+}

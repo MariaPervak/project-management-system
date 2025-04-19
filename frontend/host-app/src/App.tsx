@@ -8,8 +8,8 @@ import {AuthContext} from "../context/AuthContext/AuthContext.tsx";
 import {clearToken, getToken} from "./components/Auth/helpers.ts";
 import {useEffect, useState} from "react";
 import {jwtDecode} from "jwt-decode";
-// import KanbanPage from "./pages/KanbanPage/KanbanPage.tsx";
-
+import KanbanPage from "./pages/KanbanPage/KanbanPage.tsx";
+import {Loader} from 'ui_components/components';
 export type BadgeStatus = 'inProgress' | 'done' | 'backlog' | 'cancelled';
 
 export interface ITask {
@@ -78,7 +78,7 @@ function App() {
     }
   }, [data]);
 
-  if (loggedLoading || loading) return <p>Loading...</p>;
+  if (loggedLoading || loading) return <Loader />;
 
   if (error) return <p>Error : {error.message}</p>;
   return (
@@ -86,7 +86,7 @@ function App() {
       <Layout>
         <Routes>
           <Route path="/" element={<TaskList list={data.tasks}/>}/>
-          {/*<Route path="/kanban" element={<KanbanPage board={undefined}/>}/>*/}
+          <Route path="/kanban" element={<KanbanPage board={undefined}/>}/>
           <Route path="/create" element={<CreatePage/>}/>
         </Routes>
       </Layout>

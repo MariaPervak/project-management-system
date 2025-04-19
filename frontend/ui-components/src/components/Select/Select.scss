@@ -1,0 +1,56 @@
+.select-wrapper{
+  position: relative;
+  display: grid;
+  grid-template-areas: "select";
+  align-items: center;
+
+  &:before{
+    content: "";
+    display: inline-block;
+    width: 0.8em;
+    height: 0.5em;
+    background-color: #777;
+    clip-path: polygon(100% 0%, 0 0%, 50% 100%);
+    grid-area: select;
+    justify-self: end;
+    align-self: center;
+    position: absolute;
+    right: 1rem;
+  }
+}
+.select {
+  appearance: none;
+  text-transform: uppercase;
+  margin: 0;
+  width: 100%;
+  font-family: inherit;
+  outline: none;
+  border: 1px solid #31374a;
+  border-radius: 0.375rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  line-height: 1.49;
+  color: #31374a;
+  cursor: pointer;
+  background-color: #fff;
+  background-image: linear-gradient(to top, #f9f9f9, #fff 33%);
+  display: grid;
+  grid-template-areas: "select";
+  align-items: center;
+
+  option{
+    width: 100%;
+
+    &:hover{
+      background-color: yellow;
+    }
+  }
+
+  &_default{
+    color: #b3b5bb;
+  }
+
+  &::-ms-expand{
+    display: none;
+  }
+}
