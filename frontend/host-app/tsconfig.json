@@ -3,5 +3,12 @@
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
-  ]
+  ],
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "moduleResolution": "bundler",
+    "noEmit": true, // Для Jest обычно не нужна генерация файлов
+    "esModuleInterop": true,
+    "skipLibCheck": true
+  }
 }

@@ -1,5 +1,5 @@
 import TaskList from "task_module/TaskList";
-import { useQuery, gql } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { Routes, Route } from "react-router-dom";
 import './App.css'
 import Layout from "./components/Layout/Layout.tsx";
@@ -11,6 +11,7 @@ import {jwtDecode} from "jwt-decode";
 import {Loader} from 'ui_components/components';
 export type BadgeStatus = 'inProgress' | 'done' | 'backlog' | 'cancelled';
 import { useSubscription } from '@apollo/client';
+import {GET_TASKS, LOGIN_CHECK, TASK_ADDED_SUBSCRIPTION} from "./utils/gql.ts";
 
 export interface ITask {
   id: number;
@@ -25,35 +26,6 @@ interface AuthState {
   role: string;
   iat?: number;
 }
-
-const GET_TASKS = gql`
-    query Tasks {
-      tasks {
-        id,
-        name
-        status
-        title
-        description
-      }
-    }
-`;
-
-const LOGIN_CHECK = gql`
-  query LoginCheck ($token: String!) {
-    loginCheck(token: $token)
-  }
-`
-const TASK_ADDED_SUBSCRIPTION = gql`
-  subscription OnTaskAdded {
-    taskAdded {
-      id
-      name
-      title
-      status
-      description
-    }
-  }
-`;
 
 function App() {
   const token = getToken();
