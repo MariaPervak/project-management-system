@@ -1,4 +1,4 @@
-const {TaskQuery, TaskMutation} = require("./task");
+const {TaskQuery, TaskMutation, TaskSubscription} = require("./task");
 const {AuthMutation, AuthQuery} = require("./auth");
 const {StatusQuery} = require("./status");
 
@@ -13,6 +13,10 @@ const resolvers = {
     ...TaskMutation,
     ...AuthMutation,
   },
+
+  Subscription: {
+    ...TaskSubscription,
+  }
 };
 
 module.exports = resolvers;

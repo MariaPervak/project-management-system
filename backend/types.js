@@ -50,9 +50,14 @@ type AuthPayload {
 }
 
 type Mutation {
-   addTask(name:String, title: String, status: Int, description: String): Task
-   signUp(username: String!, email: String!, password: String!, role: String): String!
-   signIn(username: String!, password: String!): String!
+    addTask(
+        name: String
+        title: String
+        status: Int
+        description: String
+    ): Task
+    signUp(username: String!, email: String!, password: String!, role: String): String!
+    signIn(username: String!, password: String!): String!
 }
 
 type Query {
@@ -63,6 +68,12 @@ type Query {
    loginCheck(token: String!): Boolean
 }
 
+type Subscription {
+    taskAdded: Task
+    taskUpdated: Task
+}
+
 `;
+
 
 module.exports = typeDefs;

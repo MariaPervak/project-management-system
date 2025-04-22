@@ -8,9 +8,9 @@ import {AuthContext} from "../context/AuthContext/AuthContext.tsx";
 import {clearToken, getToken} from "./components/Auth/helpers.ts";
 import {useEffect, useState} from "react";
 import {jwtDecode} from "jwt-decode";
-import KanbanPage from "./pages/KanbanPage/KanbanPage.tsx";
 import {Loader} from 'ui_components/components';
 export type BadgeStatus = 'inProgress' | 'done' | 'backlog' | 'cancelled';
+import { useSubscription } from '@apollo/client';
 
 export interface ITask {
   id: number;
@@ -43,7 +43,17 @@ const LOGIN_CHECK = gql`
     loginCheck(token: $token)
   }
 `
-
+const TASK_ADDED_SUBSCRIPTION = gql`
+  subscription OnTaskAdded {
+    taskAdded {
+      id
+      name
+      title
+      status
+      description
+    }
+  }
+`;
 
 function App() {
   const token = getToken();
@@ -55,7 +65,15 @@ function App() {
     variables: { token },
   });
   const { loading, error, data } = useQuery(GET_TASKS);
-  const [board, setBoard] = useState(null);
+  const { data: subscriptionData } = useSubscription(TASK_ADDED_SUBSCRIPTION);
+
+  useEffect(() => {
+    if (subscriptionData?.taskAdded) {
+      // Обновляем локальное состояние при получении новой задачи
+      console.log('New task received:', subscriptionData.taskAdded);
+      // Здесь можно обновить список задач
+    }
+  }, [subscriptionData]);
 
   console.log('data', data);
 
@@ -66,7 +84,6 @@ function App() {
       }
       if (loggedData && loggedData.loginCheck){
         const decoded: AuthState = jwtDecode(token);
-        console.log('decoded', decoded)
         setAuthData(decoded);
       }
     }
@@ -86,7 +103,6 @@ function App() {
       <Layout>
         <Routes>
           <Route path="/" element={<TaskList list={data.tasks}/>}/>
-          <Route path="/kanban" element={<KanbanPage board={undefined}/>}/>
           <Route path="/create" element={<CreatePage/>}/>
         </Routes>
       </Layout>

@@ -1,4 +1,6 @@
 const pool = require("../db");
+const { PubSub } = require('graphql-subscriptions');
+const pubsub = new PubSub();
 
 const TaskQuery = {
   tasks: async (_, __, contextValue ) => {
@@ -53,20 +55,45 @@ const TaskQuery = {
 }
 
 const TaskMutation = {
-  addTask: async (_, args) => {
+  addTask: async (_, args, { pubsub }) => {
     try {
-      const {name, title, status, description} = args;
-      console.log('args', args)
-      const result = await pool.query(`INSERT INTO tasks (name, title, status, description) 
-VALUES ($1, $2, $3, $4) RETURNING id, name, title, description, status`, [name, title, status, description] );
-      return result.rows[0];
+      const { name, title, status, description } = args;
+      const result = await pool.query(
+          `INSERT INTO tasks (name, title, status, description)
+           VALUES ($1, $2, $3, $4)
+             RETURNING id, name, title, description, status`,
+          [name, title, status, description]
+      );
+
+      const newTask = result.rows[0];
+
+      pubsub.publish('TASK_ADDED', { taskAdded: newTask });
+
+      return newTask;
     } catch (error) {
       return { message: error.message };
     }
   },
-}
+};
+
+const TaskSubscription = {
+  taskAdded: {
+    subscribe: (_, __, { pubsub }) => {
+      console.log('PubSub instance:', pubsub);
+      console.log('asyncIterator exists:', typeof pubsub.asyncIterator === 'function');
+      if (!pubsub || typeof pubsub.asyncIterator !== 'function') {
+        throw new Error('PubSub not properly initialized');
+      }
+      return pubsub.asyncIterator(['TASK_ADDED']);
+    },
+  },
+  taskUpdated: {
+    subscribe: (_, __, { pubsub }) => pubsub.asyncIterator(['TASK_UPDATED']),
+  },
+};
 
 module.exports = {
   TaskQuery,
   TaskMutation,
+  TaskSubscription
 }
