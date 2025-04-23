@@ -12,6 +12,7 @@ import {Loader} from 'ui_components/components';
 export type BadgeStatus = 'inProgress' | 'done' | 'backlog' | 'cancelled';
 import { useSubscription } from '@apollo/client';
 import {GET_TASKS, LOGIN_CHECK, TASK_ADDED_SUBSCRIPTION} from "./utils/gql";
+import Toast from "./components/common/Toast/Toast";
 
 export interface ITask {
   id: number;
@@ -38,16 +39,13 @@ function App() {
   });
   const { loading, error, data } = useQuery(GET_TASKS);
   const { data: subscriptionData } = useSubscription(TASK_ADDED_SUBSCRIPTION);
+  const [newMessage, setMessage] = useState<string | null>(null);
 
   useEffect(() => {
     if (subscriptionData?.taskAdded) {
-      // Обновляем локальное состояние при получении новой задачи
-      console.log('New task received:', subscriptionData.taskAdded);
-      // Здесь можно обновить список задач
+      setMessage(`Задача ${subscriptionData?.taskAdded.name}-${subscriptionData.taskAdded.title} добавлена`);
     }
   }, [subscriptionData]);
-
-  console.log('data', data);
 
   useEffect(() => {
     if (!loggedLoading){
@@ -77,6 +75,7 @@ function App() {
           <Route path="/" element={<TaskList list={data.tasks}/>}/>
           <Route path="/create" element={<CreatePage/>}/>
         </Routes>
+        {newMessage && <Toast message={newMessage} key={newMessage} onClose={() => setMessage(null)}/>}
       </Layout>
     </AuthContext.Provider>
   );

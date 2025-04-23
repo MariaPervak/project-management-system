@@ -18,8 +18,6 @@ const DoneIconUrl = new URL(DoneIcon, import.meta.url);
 const CancelledIconUrl = new URL(CancelledIcon, import.meta.url);
 const NewIconUrl = new URL(NewIcon, import.meta.url);
 
-console.log('BacklogIconUrl', BacklogIconUrl)
-
 const generateContent = (status?: BadgeStatus) => {
   let title = "NEW";
   let icon: URL | string = NewIcon;

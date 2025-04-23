@@ -9,7 +9,6 @@ const JWT_SECRET='JWT_SECRET';
 
 const testQuery = async () => {
   const result = await pool.query(`SELECT * FROM tasks`);
-  console.log(result)
   return result
 }
 const addQuery = async (name, title, description) => {
@@ -17,10 +16,8 @@ const addQuery = async (name, title, description) => {
     const status = 'backlog'
     const result = await pool.query(`INSERT INTO tasks (name, title, status, description) 
 VALUES ($1, $2, $3, $4) RETURNING id, name, title, description, status`, [name, title, status, description] );
-    console.log(result);
     return result;
   } catch (error) {
-    console.log(error.message);
     return { message: error.message };
   }
 }
@@ -47,7 +44,6 @@ const addUser = async (username, email, password) => {
 const findUser = async (username) => {
   try {
     const user = await pool.query(`SELECT * FROM users where username = $1 OR email = $1`, [username]);
-    console.log(user.rows);
   } catch (err){
     console.log(err);
   }

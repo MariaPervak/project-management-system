@@ -79,8 +79,6 @@ const TaskMutation = {
 const TaskSubscription = {
   taskAdded: {
     subscribe: (_, __, { pubsub }) => {
-      console.log('PubSub instance:', pubsub);
-      console.log('asyncIterator exists:', typeof pubsub.asyncIterator === 'function');
       if (!pubsub || typeof pubsub.asyncIterator !== 'function') {
         throw new Error('PubSub not properly initialized');
       }

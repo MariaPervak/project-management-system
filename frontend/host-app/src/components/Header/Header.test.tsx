@@ -3,7 +3,7 @@ import '@testing-library/jest-dom';
 import Header from './Header';
 
 jest.mock('../Auth/Auth', () => () => <div data-testid="auth-component">Auth</div>);
-jest.mock('./logo.png', () => 'mock-logo-path.png');
+jest.mock('./logo_1.png', () => 'mock-logo-path.png');
 
 describe('Header component', () => {
     beforeEach(() => {

@@ -43,9 +43,6 @@ const CreatePage = () => {
       return {...prevState, [e.target.name]: value}
     })
   }
-
-  console.log('data1', form);
-
   if (loading || optionsLoading) return <Loader />;
 
   if (error) return `Submission error! ${error.message}`;
