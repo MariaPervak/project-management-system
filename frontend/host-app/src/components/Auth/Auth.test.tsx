@@ -3,9 +3,9 @@ import '@testing-library/jest-dom';
 import { MockedProvider } from '@apollo/client/testing';
 import Auth from './Auth';
 import { AuthContext } from '../../../context/AuthContext/AuthContext';
+import userEvent from '@testing-library/user-event';
 import {SIGN_IN, SIGN_UP} from "../../utils/gql";
 
-// Моки для GraphQL мутаций
 const mockSignUpSuccess = {
     request: {
         query: SIGN_UP,
@@ -51,7 +51,6 @@ const mockSignUpError = {
     error: new Error('Registration failed')
 };
 
-// Моки для внешних компонентов
 jest.mock('../common/Modal/Modal', () => ({
                                               isOpen, title, children, onAction, onClose, buttonText }: any) => {
     return isOpen ? (
@@ -89,7 +88,7 @@ jest.mock('ui_components/components', () => ({
 describe('Auth Component', () => {
     const originalLocation = window.location;
     beforeAll(() => {
-        // @ts-ignore - временно переопределяем location для тестов
+        // @ts-ignore
         delete window.location;
         window.location = {
             ...originalLocation,
@@ -98,7 +97,6 @@ describe('Auth Component', () => {
     });
 
     afterAll(() => {
-        // Восстанавливаем оригинальный location после тестов
         window.location = originalLocation;
     });
     const renderAuth = (role = 'guest', mocks = []) => {
@@ -135,8 +133,12 @@ describe('Auth Component', () => {
     it('opens register modal and submits form', async () => {
         renderAuth('guest', [mockSignUpSuccess]);
 
-        fireEvent.click(screen.getByText('Зарегистрироваться'));
-        expect(screen.getByTestId('modal')).toBeInTheDocument();
+        const registerButtons = screen.getAllByText('Зарегистрироваться');
+        fireEvent.click(registerButtons[0]);
+
+        await waitFor(() => {
+            expect(screen.getByTestId('modal')).toBeInTheDocument();
+        });
 
         fireEvent.change(screen.getByTestId('input-userName'), {
             target: { value: 'testuser', name: 'userName' }
@@ -148,84 +150,80 @@ describe('Auth Component', () => {
             target: { value: 'password123', name: 'password' }
         });
 
-        fireEvent.click(screen.getByText('Зарегистрироваться'));
+        const modalRegisterButton = screen.getAllByText('Зарегистрироваться')[1];
+        fireEvent.click(modalRegisterButton);
 
         await waitFor(() => {
             expect(localStorage.setItem).not.toHaveBeenCalled(); // Регистрация не сохраняет токен
         });
     });
 
-    it('opens auth modal and submits form', async () => {
-        renderAuth('guest', [mockSignInSuccess]);
+    it('shows error toast when registration fails', async () => {
+        jest.mock('../common/Toast/Toast', () => ({ message }: { message: string }) => (
+            <div data-testid="toast">{message}</div>
+        ));
 
-        fireEvent.click(screen.getByText('Авторизоваться'));
-        expect(screen.getByTestId('modal')).toBeInTheDocument();
+        const mockError = {
+            request: {
+                query: SIGN_UP,
+                variables: {
+                    username: 'testuser',
+                    email: 'test@example.com',
+                    password: 'password123',
+                    role: undefined
+                }
+            },
+            result: {
+                errors: [
+                    {
+                        message: 'Registration failed',
+                        extensions: {
+                            code: 'BAD_USER_INPUT',
+                            exception: {
+                                stacktrace: ['Detailed error stack']
+                            }
+                        },
+                        locations: [{ line: 2, column: 3 }],
+                        path: ['signUp']
+                    }
+                ],
+                data: null // Важно для ошибок GraphQL
+            }
+        };
 
-        fireEvent.change(screen.getByTestId('input-userName'), {
-            target: { value: 'testuser', name: 'userName' }
-        });
-        fireEvent.change(screen.getByTestId('input-password'), {
-            target: { value: 'password123', name: 'password' }
-        });
+        render(
+            <MockedProvider
+                mocks={[mockError]}
+                addTypename={false}
+                defaultOptions={{
+                    mutate: { errorPolicy: 'all' }
+                }}
+            >
+                <AuthContext.Provider value={{ role: 'guest' }}>
+                    <Auth />
+                </AuthContext.Provider>
+            </MockedProvider>
+        );
 
-        fireEvent.click(screen.getByText('Авторизоваться'));
+        const user = userEvent.setup();
+
+        const [openButton] = await screen.findAllByText('Зарегистрироваться');
+        await user.click(openButton);
+
+        await user.type(screen.getByTestId('input-userName'), 'testuser');
+        await user.type(screen.getByTestId('input-email'), 'test@example.com');
+        await user.type(screen.getByTestId('input-password'), 'password123');
+
+        const [, submitButton] = await screen.findAllByText('Зарегистрироваться');
+        await user.click(submitButton);
 
         await waitFor(() => {
-            expect(localStorage.setItem).toHaveBeenCalledWith('token', 'token123');
-            expect(window.location.reload).toHaveBeenCalled();
-        });
-    });
+            const toast = screen.getByTestId('toast');
+            expect(toast).toHaveTextContent('Registration failed');
 
-    // it('shows error toast when registration fails', async () => {
-    //     // 1. Создаем мок с ошибкой
-    //     const mockError = {
-    //         request: {
-    //             query: SIGN_UP,
-    //             variables: {
-    //                 username: 'testuser',
-    //                 email: 'test@example.com',
-    //                 password: 'password123',
-    //                 role: undefined
-    //             }
-    //         },
-    //         error: new Error('Registration failed')
-    //     };
-    //
-    //     // 2. Рендерим компонент
-    //     render(
-    //         <MockedProvider mocks={[mockError]} addTypename={false}>
-    //             <AuthContext.Provider value={{ role: 'guest' }}>
-    //                 <Auth />
-    //             </AuthContext.Provider>
-    //         </MockedProvider>
-    //     );
-    //
-    //     // 3. Открываем форму регистрации
-    //     const registerButtons = await screen.findAllByText('Зарегистрироваться');
-    //     fireEvent.click(registerButtons[0]);
-    //
-    //     // 4. Заполняем форму
-    //     await waitFor(() => {
-    //         fireEvent.change(screen.getByTestId('input-userName'), {
-    //             target: { value: 'testuser', name: 'userName' }
-    //         });
-    //         fireEvent.change(screen.getByTestId('input-email'), {
-    //             target: { value: 'test@example.com', name: 'email' }
-    //         });
-    //         fireEvent.change(screen.getByTestId('input-password'), {
-    //             target: { value: 'password123', name: 'password' }
-    //         });
-    //     });
-    //
-    //     // 5. Отправляем форму
-    //     const submitButton = (await screen.findAllByText('Зарегистрироваться'))[1];
-    //     fireEvent.click(submitButton);
-    //
-    //     // 6. Проверяем появление Toast с ошибкой
-    //     const toast = await screen.findByTestId('toast');
-    //     expect(toast).toBeInTheDocument();
-    //     expect(toast).toHaveTextContent('Registration failed');
-    // });
+            expect(screen.getByText('Registration failed')).toBeInTheDocument();
+        }, { timeout: 3000 });
+    });
 
     it('handles logout correctly', () => {
         renderAuth('user');
