@@ -2,16 +2,16 @@ import TaskList from "task_module/TaskList";
 import { useQuery } from '@apollo/client';
 import { Routes, Route } from "react-router-dom";
 import './App.css'
-import Layout from "./components/Layout/Layout.tsx";
-import CreatePage from "./pages/Create/CreatePage.tsx";
-import {AuthContext} from "../context/AuthContext/AuthContext.tsx";
-import {clearToken, getToken} from "./components/Auth/helpers.ts";
+import Layout from "./components/Layout/Layout";
+import CreatePage from "./pages/Create/CreatePage";
+import {AuthContext} from "../context/AuthContext/AuthContext";
+import {clearToken, getToken} from "./components/Auth/helpers";
 import {useEffect, useState} from "react";
 import {jwtDecode} from "jwt-decode";
 import {Loader} from 'ui_components/components';
 export type BadgeStatus = 'inProgress' | 'done' | 'backlog' | 'cancelled';
 import { useSubscription } from '@apollo/client';
-import {GET_TASKS, LOGIN_CHECK, TASK_ADDED_SUBSCRIPTION} from "./utils/gql.ts";
+import {GET_TASKS, LOGIN_CHECK, TASK_ADDED_SUBSCRIPTION} from "./utils/gql";
 
 export interface ITask {
   id: number;
@@ -67,7 +67,7 @@ function App() {
     }
   }, [data]);
 
-  if (loggedLoading || loading) return <Loader />;
+  if (loggedLoading || loading) return <Loader data-testid="loader"/>;
 
   if (error) return <p>Error : {error.message}</p>;
   return (

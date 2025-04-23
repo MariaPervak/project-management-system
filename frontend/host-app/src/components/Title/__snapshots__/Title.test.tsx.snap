@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Title component matches snapshot 1`] = `
+<DocumentFragment>
+  <h1
+    class="title"
+  >
+    Snapshot Test
+  </h1>
+</DocumentFragment>
+`;

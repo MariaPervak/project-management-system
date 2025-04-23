@@ -32,8 +32,6 @@ const CreatePage = () => {
     })): [];
   }, [optionsData]);
 
-  console.log('options:', options);
-
   const handleClick = (e: any) => {
     e.preventDefault();
     addTask({variables: form})

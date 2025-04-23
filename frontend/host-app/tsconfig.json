@@ -5,10 +5,19 @@
     { "path": "./tsconfig.node.json" }
   ],
   "compilerOptions": {
-    "allowImportingTsExtensions": true,
-    "moduleResolution": "bundler",
-    "noEmit": true, // Для Jest обычно не нужна генерация файлов
+    "jsx": "react-jsx",
+    "module": "esnext",
+    "target": "esnext",
+    "moduleResolution": "node",
     "esModuleInterop": true,
-    "skipLibCheck": true
-  }
+    "skipLibCheck": true,
+    "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    "types": ["jest", "node"]
+  },
+"include": ["src", "tests"],
+"exclude": ["node_modules"]
 }

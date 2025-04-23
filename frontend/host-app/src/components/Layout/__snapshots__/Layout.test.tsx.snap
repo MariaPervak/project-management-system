@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Layout component matches snapshot with children 1`] = `
+<DocumentFragment>
+  <div
+    class="layout"
+  >
+    <header
+      data-testid="header"
+    >
+      Header
+    </header>
+    <div
+      class="layout__content"
+    >
+      <nav
+        data-testid="sidebar"
+      >
+        Sidebar
+      </nav>
+      <main
+        class="layout__body"
+      >
+        Snapshot Content
+      </main>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`Layout component matches snapshot without children 1`] = `
+<DocumentFragment>
+  <div
+    class="layout"
+  >
+    <header
+      data-testid="header"
+    >
+      Header
+    </header>
+    <div
+      class="layout__content"
+    >
+      <nav
+        data-testid="sidebar"
+      >
+        Sidebar
+      </nav>
+      <main
+        class="layout__body"
+      >
+        Test Content
+      </main>
+    </div>
+  </div>
+</DocumentFragment>
+`;

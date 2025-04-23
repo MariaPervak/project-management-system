@@ -7,6 +7,7 @@ import {clearToken} from "./helpers.ts";
 import {Button, Input} from "ui_components/components";
 
 import './Auth.scss';
+import {SIGN_IN, SIGN_UP} from "../../utils/gql";
 
 type Action = 'register' | 'auth';
 
@@ -21,17 +22,7 @@ interface AuthProps {
   onAuth?: (form: Form) => void;
 }
 
-const SIGN_UP = gql`
-    mutation SignUp($username: String!, $email: String!, $password: String!, $role: String) {
-      signUp(username: $username, email: $email, password: $password, role: $role)
-    }
-  `
 
-const SIGN_IN = gql`
-    mutation SignIn($username: String!, $password: String!) {
-      signIn(username: $username, password: $password)
-    }
-  `
 
 const Auth = ({onRegister, onAuth}: AuthProps) => {
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);

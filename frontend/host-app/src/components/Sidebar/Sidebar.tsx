@@ -11,7 +11,6 @@ const Sidebar = () => {
     <nav className='sidebar'>
       <ul>
         <li><Link to="/">Список задач</Link></li>
-        <li><Link to="/kanban">Kanban</Link></li>
         {authData.role === 'admin' && (
           <li><Link to="/create">Создать</Link></li>
         )}

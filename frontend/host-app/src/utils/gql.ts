@@ -29,3 +29,15 @@ export const TASK_ADDED_SUBSCRIPTION = gql`
         }
     }
 `;
+
+export const SIGN_UP = gql`
+    mutation SignUp($username: String!, $email: String!, $password: String!, $role: String) {
+        signUp(username: $username, email: $email, password: $password, role: $role)
+    }
+`
+
+export const SIGN_IN = gql`
+    mutation SignIn($username: String!, $password: String!) {
+        signIn(username: $username, password: $password)
+    }
+`

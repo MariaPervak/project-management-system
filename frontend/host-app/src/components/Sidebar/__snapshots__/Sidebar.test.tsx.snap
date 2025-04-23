@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Sidebar component matches snapshot for admin 1`] = `
+<DocumentFragment>
+  <nav
+    class="sidebar"
+  >
+    <ul>
+      <li>
+        <a
+          href="/"
+        >
+          Список задач
+        </a>
+      </li>
+      <li>
+        <a
+          href="/create"
+        >
+          Создать
+        </a>
+      </li>
+    </ul>
+  </nav>
+</DocumentFragment>
+`;
+
+exports[`Sidebar component matches snapshot for regular user 1`] = `
+<DocumentFragment>
+  <nav
+    class="sidebar"
+  >
+    <ul>
+      <li>
+        <a
+          href="/"
+        >
+          Список задач
+        </a>
+      </li>
+    </ul>
+  </nav>
+</DocumentFragment>
+`;
